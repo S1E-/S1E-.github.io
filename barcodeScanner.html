@@ -18,16 +18,34 @@
         <!-- https://yushulx.medium.com/how-to-decode-qr-code-information-from-aadhaar-card-f53b509eb217 -->
 
         <script>
+            function onFileSelected(event) {
+                var selectedFile = event.target.files[0];
+                var reader = new FileReader();
+
+                var imgtag = document.getElementById("image_uploaded");
+                imgtag.title = selectedFile.name;
+
+                reader.onload = function (event) {
+                    imgtag.src = event.target.result;
+                };
+
+                reader.readAsDataURL(selectedFile);
+            }
+
             document
                 .getElementById("uploadImage")
                 .addEventListener("change", async function () {
+                    onFileSelected(event)
                     $("#showing_status").show();
                     $("#results").empty();
                     var files = this.files;
+
+                    console.log(files);
+
                     let reader = await Dynamsoft.DBR.BarcodeScanner.createInstance();
                     let results = await reader.decode(files[0]);
                     $("#showing_status").hide();
-                    $("#image_uploaded").attr("src", files[0].name).show();
+                    $("#image_uploaded").show();
                     if (results.length == 0) {
                         $("#results").append("No barcode detected!");
                         return;
