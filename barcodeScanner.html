@@ -12,6 +12,7 @@
             accept="image/bmp,image/jpeg,image/png,image/gif"
         />
         <p id="showing_status" style="display: none">Loading...</p>
+        <img id="image_uploaded" style="display: none; float: right" />
         <p id="results"></p>
 
         <!-- https://yushulx.medium.com/how-to-decode-qr-code-information-from-aadhaar-card-f53b509eb217 -->
@@ -26,18 +27,18 @@
                     let reader = await Dynamsoft.DBR.BarcodeScanner.createInstance();
                     let results = await reader.decode(files[0]);
                     $("#showing_status").hide();
-                    console.log(results);
+                    $("#image_uploaded").attr("src", files[0].name).show();
                     if (results.length == 0) {
                         $("#results").append("No barcode detected!");
                         return;
                     }
                     for (let result of results) {
-                        console.log(result.barcodeText);
+                        // console.log(result.barcodeText);
                         try {
                             (xmlDoc = $.parseXML(result.barcodeText)),
                                 $(xmlDoc).each(function (i, obj) {
-                                    console.log(i);
-                                    console.log(obj.documentElement.nodeName);
+                                    // console.log(i);
+                                    // console.log(obj.documentElement.nodeName);
 
                                     $data = $(xmlDoc).find(
                                         obj.documentElement.nodeName
@@ -49,8 +50,8 @@
                                                 var name = attrib.name;
                                                 var value = attrib.value;
 
-                                                console.log(name);
-                                                console.log(value);
+                                                // console.log(name);
+                                                // console.log(value);
 
                                                 info =
                                                     "<div>" +
